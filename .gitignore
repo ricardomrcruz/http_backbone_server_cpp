@@ -1,0 +1,10 @@
+# Create .gitignore file
+echo "## Visual Studio files
+.vs/
+x64/
+Debug/
+Release/
+*.user
+*.suo
+*.vsidx
+enc_temp_folder/" > .gitignore
