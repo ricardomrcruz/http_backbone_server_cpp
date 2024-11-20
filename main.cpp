@@ -1,9 +1,4 @@
-#include <iostream>
-#include <WS2tcpip.h>
-#include <string>
-#include <sstream>
-
-#pragma comment (lib, "ws2_32.lib")
+#include "TcpListener.h"
 
 using namespace std;
 
