@@ -89,9 +89,9 @@ int TcpListener::run()
 				// Add the new connection to the list of connected clients
 				FD_SET(client, &m_master);
 
-
-				//todo: client connected?
-				// 
+				//client connected
+				onClientConnected(sock);
+				
 				//// Send a welcome message to the connected client
 				//string welcomeMsg = "Welcome to the Awesome Chat Server!\r\n";
 				//
@@ -106,13 +106,14 @@ int TcpListener::run()
 				if (bytesIn <= 0)
 				{
 					// Drop the client
-					//TODO: client disconnected
+					onClientDisconnected(sock);
 					closesocket(sock);
 					FD_CLR(sock, &m_master);
 					
 				}
 				else
 				{
+					onMessageReceived(sock, buf, bytesIn);
 					//// Check to see if it's a command. \quit kills the server
 					//if (buf[0] == '\\')
 					//{
@@ -129,6 +130,15 @@ int TcpListener::run()
 					//}
 
 					// Send message to other clients, and definiately NOT the listening socket
+					//for (int i = 0; i < m_master.fd_count; i++)
+					//{
+					//	SOCKET outSock = m_master.fd_array[i];
+					//	if (outSock != m_socket && outSock != sock)
+					//	{
+
+					//		//sendToClient(outSock, msg, length);
+					//	}
+					//}
 
 					
 				}
@@ -180,4 +190,23 @@ void TcpListener::broadcastToClients(int sendingClient, const char* msg, int len
 			sendToClient(outSock, msg, length);
 		}
 	}
+}
+
+
+//handler for client connections
+void TcpListener::onClientConnected(int clientSocket)
+{
+
+}
+
+//handler for client disconnections
+void TcpListener::onClientDisconnected(int clientSocket)
+{
+
+}
+
+//handler when a message is received from a client
+void TcpListener::onMessageReceived(int clientSocket, const char* msg, int length)
+{
+
 }
