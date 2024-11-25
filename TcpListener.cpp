@@ -32,7 +32,7 @@ int TcpListener::init()
 	}
 
 	// Tell Winsock the socket is for listening 
-	if (listen(m_socket, SOMAXCONN) == SOCKET_ERROR);
+	if (listen(m_socket, SOMAXCONN) == SOCKET_ERROR)
 	{
 		return WSAGetLastError();
 	}
@@ -92,9 +92,7 @@ int TcpListener::run()
 				//client connected
 				onClientConnected(sock);
 				
-				//// Send a welcome message to the connected client
-				//string welcomeMsg = "Welcome to the Awesome Chat Server!\r\n";
-				//
+				
 			}
 			else // It's an inbound message
 			{
@@ -169,6 +167,7 @@ int TcpListener::run()
 
 	// Cleanup winsock
 	WSACleanup();
+	return 0;
 
 
 }

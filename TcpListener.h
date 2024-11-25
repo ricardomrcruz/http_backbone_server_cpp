@@ -28,10 +28,10 @@ public:
 protected:
 
 	//handler for client connections
-	virtual void onClientConnected();
+	virtual void onClientConnected(int clientSocket);
 
 	//handler for client disconnections
-	virtual void onClientDisconnected();
+	virtual void onClientDisconnected(int clientSocket);
 
 	//handler when a message is received from a client
 	virtual void onMessageReceived(int clientSocket, const char* msg, int length);
