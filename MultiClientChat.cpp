@@ -1,8 +1,6 @@
 #include "MultiClientChat.h"
 #include <string>
 
-
-
 void MultiClientChat::onClientConnected(int clientSocket)
 {
 	// Send a welcome message to the connected client
@@ -10,17 +8,12 @@ void MultiClientChat::onClientConnected(int clientSocket)
 	sendToClient(clientSocket, welcomeMsg.c_str(), welcomeMsg.size() + 1);
 }
 
-
-void onClientDisconnected(int clientSocket)
+void MultiClientChat::onClientDisconnected(int clientSocket)
 {
 
 }
 
-
-void onMessageReceived(int clientSocket, const char* msg, int length)
+void MultiClientChat::onMessageReceived(int clientSocket, const char* msg, int length)
 {
-
+	broadcastToClients(clientSocket, msg, length);
 }
-
-
-

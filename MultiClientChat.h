@@ -6,17 +6,16 @@ class MultiClientChat : public TcpListener
 public:
 
 	MultiClientChat(const char* ipAddress, int port) :
-		TcpListener(ipAddress, port) {
-
-	}
+		TcpListener(ipAddress, port) { }
 
 protected:
-	//handler for client connections
+
+	// Handler for client connections
 	virtual void onClientConnected(int clientSocket);
 
-	//handler for client disconnections
+	// Handler for client disconnections
 	virtual void onClientDisconnected(int clientSocket);
 
-	//handler when a message is received from a client
+	// Handler for when a message is received from the client
 	virtual void onMessageReceived(int clientSocket, const char* msg, int length);
 };

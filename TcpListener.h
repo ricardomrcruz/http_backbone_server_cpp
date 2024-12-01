@@ -7,49 +7,47 @@
 
 #pragma comment (lib, "ws2_32.lib")
 
-
-class TcpListener 
+class TcpListener
 {
 
 public:
 
-	TcpListener(const char* ipAddress, int port) :
-		m_ipAddress(ipAddress), m_port(port) { }
+	TcpListener(const char* ipAddress, int port):
+		m_ipAddress(ipAddress), 
+		m_port(port), 
+		m_socket(INVALID_SOCKET)
+	{
+		FD_ZERO(&m_master);
+	}
 
-	// initialize the listener
+	// Initialize the listener
 	int init();
 
-	//run the listener
+	// Run the listener
 	int run();
-
-
-
 
 protected:
 
-	//handler for client connections
+	// Handler for client connections
 	virtual void onClientConnected(int clientSocket);
 
-	//handler for client disconnections
+	// Handler for client disconnections
 	virtual void onClientDisconnected(int clientSocket);
 
-	//handler when a message is received from a client
+	// Handler for when a message is received from the client
 	virtual void onMessageReceived(int clientSocket, const char* msg, int length);
 
-	//send a message to the client
+	// Send a message to a client
 	void sendToClient(int clientSocket, const char* msg, int length);
 
-	//broadcast a message to a client
+	// Broadcast a message from a client
 	void broadcastToClients(int sendingClient, const char* msg, int length);
 
 private:
 
-	const char* m_ipAddress;    // IP Adress server will run on
-	int			m_port;			// Port # for the web service
-	int			m_socket;		// Internal FD for the listening socket
-	fd_set      m_master;       // Master file descriptor set
-
-
-
+	const char* m_ipAddress;	// IP Address server will run on
+	int				m_port;			// Port # for the web service
+	int				m_socket;		// Internal FD for the listening socket
+	fd_set			m_master;		// Master file descriptor set
 	
 };

@@ -1,8 +1,8 @@
 #include "TcpListener.h"
 
+
 int TcpListener::init()
 {
-
 	// Initialze winsock
 	WSADATA wsData;
 	WORD ver = MAKEWORD(2, 2);
@@ -14,13 +14,13 @@ int TcpListener::init()
 	}
 
 	// Create a socket
-	SOCKET m_socket = socket(AF_INET, SOCK_STREAM, 0);
+	m_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (m_socket == INVALID_SOCKET)
 	{
 		return WSAGetLastError();
 	}
 
-	//bind the ip address and port to a socket
+	// Bind the ip address and port to a socket
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
 	hint.sin_port = htons(m_port);
@@ -46,12 +46,10 @@ int TcpListener::init()
 	FD_SET(m_socket, &m_master);
 
 	return 0;
-
 }
 
 int TcpListener::run()
 {
-
 	// this will be changed by the \quit command (see below, bonus not in video!)
 	bool running = true;
 
@@ -89,10 +87,7 @@ int TcpListener::run()
 				// Add the new connection to the list of connected clients
 				FD_SET(client, &m_master);
 
-				//client connected
-				onClientConnected(sock);
-				
-				
+				onClientConnected(client);
 			}
 			else // It's an inbound message
 			{
@@ -107,38 +102,10 @@ int TcpListener::run()
 					onClientDisconnected(sock);
 					closesocket(sock);
 					FD_CLR(sock, &m_master);
-					
 				}
 				else
 				{
 					onMessageReceived(sock, buf, bytesIn);
-					//// Check to see if it's a command. \quit kills the server
-					//if (buf[0] == '\\')
-					//{
-					//	// Is the command quit? 
-					//	string cmd = string(buf, bytesIn);
-					//	if (cmd == "\\quit")
-					//	{
-					//		running = false;
-					//		break;
-					//	}
-
-					//	// Unknown command
-					//	continue;
-					//}
-
-					// Send message to other clients, and definiately NOT the listening socket
-					//for (int i = 0; i < m_master.fd_count; i++)
-					//{
-					//	SOCKET outSock = m_master.fd_array[i];
-					//	if (outSock != m_socket && outSock != sock)
-					//	{
-
-					//		//sendToClient(outSock, msg, length);
-					//	}
-					//}
-
-					
 				}
 			}
 		}
@@ -149,16 +116,10 @@ int TcpListener::run()
 	FD_CLR(m_socket, &m_master);
 	closesocket(m_socket);
 
-	// Message to let users know what's happening.
-	/*string msg = "Server is shutting down. Goodbye\r\n";*/
-
 	while (m_master.fd_count > 0)
 	{
 		// Get the socket number
 		SOCKET sock = m_master.fd_array[0];
-
-		// Send the goodbye message
-		/*send(sock, msg.c_str(), msg.size() + 1, 0);*/
 
 		// Remove it from the master file list and close the socket
 		FD_CLR(sock, &m_master);
@@ -168,8 +129,6 @@ int TcpListener::run()
 	// Cleanup winsock
 	WSACleanup();
 	return 0;
-
-
 }
 
 
@@ -185,26 +144,21 @@ void TcpListener::broadcastToClients(int sendingClient, const char* msg, int len
 		SOCKET outSock = m_master.fd_array[i];
 		if (outSock != m_socket && outSock != sendingClient)
 		{
-			
 			sendToClient(outSock, msg, length);
 		}
 	}
 }
 
-
-//handler for client connections
 void TcpListener::onClientConnected(int clientSocket)
 {
 
 }
 
-//handler for client disconnections
 void TcpListener::onClientDisconnected(int clientSocket)
 {
 
 }
 
-//handler when a message is received from a client
 void TcpListener::onMessageReceived(int clientSocket, const char* msg, int length)
 {
 
